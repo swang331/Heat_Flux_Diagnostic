@@ -1,98 +1,293 @@
-# Refactoring an Underworld3 Thermal Convection Script with Heat-Flux Diagnostics
+# Heat_Flux_Diagnostic
 
-## Project Summary
-This project refactors an Underworld3 thermal convection model into a modular workflow for studying heat transport in a simplified planetary interior. The model solves coupled Stokes flow and thermal advection-diffusion in annulus geometry, and the refactor improves maintainability by separating configuration, model setup, diagnostics, plotting, testing, and execution into distinct components. A key scientific extension of the workflow is the addition of heat-flux diagnostics, which help quantify how efficiently heat is transported through the convecting system.
+A modular Underworld3 workflow for thermal convection in annulus geometry with heat-flux diagnostics for simplified planetary interior studies.
 
-## What
-This project refactors an existing Underworld3 thermal convection workflow into a cleaner, more modular, and more maintainable codebase. The original model represents a simplified shell-like planetary interior using annulus geometry and solves coupled Stokes flow and temperature advection-diffusion. The refactor separates configuration, model construction, diagnostics, plotting, and execution into distinct components, while also introducing heat-flux diagnostics and structured output handling.
+---
 
-## How
-The workflow has been reorganized into a multi-file Python project with clearly separated responsibilities:
+## Overview
 
-- `config.py` defines model parameters and runtime configuration.
-- `model.py` builds the computational mesh, field variables, and solver setup.
-- `diagnostics.py` contains heat-flux and related diagnostic calculations.
-- `plotting.py` provides visualization utilities for model output.
-- `tests.py` includes lightweight validation checks.
-- `main.py` serves as the main execution entry point.
+This project refactors an Underworld3 thermal convection model into a cleaner, more modular, and more maintainable workflow for studying heat transport in a simplified shell-like planetary interior.
 
-A `ModelConfig` dataclass is used to group model parameters into a single structured object, improving parameter management and reducing ambiguity in function interfaces. The codebase is being rewritten toward a more PEP 8-compliant, documented, and modular design.
+The model solves coupled Stokes flow and thermal advection-diffusion in annulus geometry. In addition to improving code organization, this refactor adds heat-flux diagnostics so that model behaviour can be evaluated using physically meaningful transport metrics rather than temperature visualization alone.
 
-## Scientific Scope
-This project focuses on one important interior process: convective heat transport. It is not intended to be a fully realistic Earth model. Instead, it provides a simplified computational framework for studying how temperature differences drive flow and how that flow transports heat through an interior shell. This reduced scope keeps the model interpretable and makes it easier to validate, extend, and adapt for future Earth and planetary interior studies.
+This project is intended as a simplified computational framework for studying convective heat transport. It is not a fully realistic Earth model. Instead, it provides a reusable starting point for future geodynamic and planetary interior applications.
 
-## Why
-The original workflow functioned as a monolithic script, which made extension, testing, interpretation, and reuse more difficult. This refactor improves readability, maintainability, and reproducibility, while also making it easier to add scientifically useful diagnostics.
+---
 
-In particular, heat-flux diagnostics are important because temperature plots alone do not fully describe thermal transport. Measuring radial heat flux provides a more physically meaningful way to evaluate how efficiently heat is transferred through the convecting system and whether the model is approaching steady-state behavior.
+## Scientific Motivation
 
-## Assignment Option
-This project follows **Option #2: Re-write Existing Code**.
+Temperature plots are useful, but they do not fully describe how efficiently a convecting system transports heat.
 
-## Selected Project Tasks
+A key scientific extension in this workflow is the addition of radial heat-flux diagnostics. These diagnostics help quantify thermal transport across model boundaries and track how that transport changes through time.
 
-### Project Task #1
-Refactor the original convection script into a modular, documented, and maintainable workflow. This includes improved code organization, clearer file structure, PEP 8-oriented formatting, and separation of distinct responsibilities into reusable functions and modules.
+This makes it possible to:
 
-### Project Task #2
-Add structured parameter handling and heat-flux diagnostics to the workflow. This includes the implementation of a `ModelConfig` dataclass, configuration-driven parameter input through `config.py`, and diagnostic calculations collected in `diagnostics.py`.
+- evaluate heat transport efficiency
+- compare model behaviour under different parameter choices
+- assess whether the system is approaching steady-state behaviour
+- support future Earth and comparative planetary interior studies
 
-## Additional Technical Improvements
-The current refactor also includes several supplementary improvements beyond the two selected project tasks:
+---
 
-- validation checks in `tests.py`
-- reproducible diagnostic output through CSV export
-- cleaner repository organization for development and extension
-- feature-branch-based development workflow
+## Project Scope
+
+This project focuses on a simplified convection problem in annulus geometry. The goal is not maximum physical realism, but a code structure that is easier to read, test, validate, and extend.
+
+The workflow is designed to support future additions such as:
+
+- temperature-dependent viscosity
+- internal heating
+- additional transport diagnostics
+- more planet-specific parameter choices
+- comparative studies across terrestrial bodies
+
+Because the model is configuration-driven, parameters such as gravity, thermal expansivity, viscosity, thermal diffusivity, and boundary temperatures can be modified more easily than in a monolithic script.
+
+---
+
+## What This Refactor Improves
+
+The original workflow functioned as a largely monolithic script, which made extension, testing, interpretation, and reuse more difficult.
+
+This refactor improves:
+
+- readability
+- maintainability
+- modularity
+- reproducibility
+- parameter management
+- diagnostic output handling
+
+The project is being rewritten toward a more structured, documented, and PEP 8-oriented design.
+
+---
 
 ## Repository Structure
 
+The workflow is organized into separate modules with distinct responsibilities:
+
 - `config.py` — model parameters and runtime configuration
 - `model.py` — mesh generation, fields, and solver setup
-- `diagnostics.py` — heat-flux diagnostic calculations
+- `diagnostics.py` — heat-flux and related diagnostic calculations
 - `plotting.py` — plotting and visualization utilities
 - `tests.py` — lightweight validation and assertion-based checks
-- `main.py` — primary execution script
+- `main.py` — primary execution entry point
 
-## Model Use and Extensions
-The refactored workflow is designed as a reusable foundation for future geodynamic and planetary interior studies. In its current form, it can be used to analyze simplified thermal convection and heat transport in a shell-like domain. With further development, the same framework could be extended toward more realistic mantle-style applications by adding features such as temperature-dependent viscosity, internal heating, additional transport diagnostics, or more planet-specific parameter choices.
+A `ModelConfig` dataclass is used to group model parameters into a single structured object, reducing ambiguity in function interfaces and improving parameter handling.
 
-Because the workflow is configuration-driven, it can also be adapted for comparative studies of other terrestrial bodies by changing model parameters such as gravity, thermal expansivity, viscosity, thermal diffusivity, or boundary temperatures.
+---
 
-## How to Run
+## Selected Project Tasks
 
-```bash
-python main.py
-```
-## to run in uw3 environment (inside the underworld3) --
-pixi run -e runtime python /Users/saurabhshukla/REPOSITORIES/Heat_Flux_Diagnostic/main.py 
-## Note : add your file path to run the code in place of (/Users/saurabhshukla/REPOSITORIES/)
+### Project Task 1
+Refactor the original convection script into a modular, documented, and maintainable workflow. This includes improved code organization, clearer file structure, separation of responsibilities, and reusable functions and modules.
 
-## This is the intended entry point for the refactored workflow.
+### Project Task 2
+Add structured parameter handling and heat-flux diagnostics to the workflow. This includes the implementation of a `ModelConfig` dataclass, configuration-driven input through `config.py`, and diagnostic calculations collected in `diagnostics.py`.
 
-## Heat-Flux Diagnostics
+---
 
-A major scientific addition in this refactor is the implementation of heat-flux diagnostics. These diagnostics are intended to measure how thermal energy is transported across the model boundaries and how that transport evolves through time.
+## Additional Technical Improvements
+
+Beyond the two selected project tasks, the current refactor also includes:
+
+- lightweight validation checks in `tests.py`
+- structured and reproducible diagnostic output
+- cleaner repository organization for development and extension
+- feature-branch-based development workflow
+- improved separation between setup, diagnostics, plotting, and execution
+
+---
+
+## Installation and Environment Setup
+
+This project is designed to be run using the **Underworld3 environment**.
+
+### Recommended Repository Layout
+
+Store both repositories in the same parent directory:
+
+```text
+REPOSITORIES/
+├── underworld3
+└── Heat_Flux_Diagnostic
+
+>> This sibling layout keeps execution simple and avoids path confusion.
+
+1. Clone Underworld3
+cd /path/to/REPOSITORIES
+git clone https://github.com/underworldcode/underworld3.git
+cd underworld3
+2. Set Up Underworld3
+
+Run:
+
+./uw setup
+
+Underworld3 uses pixi to manage its environments. The ./uw setup command installs and configures the UW3 environment and dependencies.
+
+When prompted, choose the runtime environment.
+
+3. About the UW3 Conda Environment
+
+You may already have, or may choose to create, a local conda environment such as:
+
+conda create -n uw3 python=3.11
+conda activate uw3
+
+This can be useful as a local shell environment, but for this project it is not the primary environment manager.
+
+The important point is:
+
+conda can provide a local Python environment
+Underworld3 itself is managed through pixi
+the most reliable way to run this project is still through:
+pixi run -e runtime python ../Heat_Flux_Diagnostic/main.py
+
+So even if you activate a conda environment called uw3, you should still use the UW3 pixi runtime command when running this repository.
+
+4. Clone This Project
+
+Return to the parent directory and clone this repository:
+
+cd ..
+git clone https://github.com/ss2098/Heat_Flux_Diagnostic.git
+
+Your directory layout should now look like:
+
+REPOSITORIES/
+├── underworld3
+└── Heat_Flux_Diagnostic
+How to Run
+
+This project should be run from inside the underworld3 repository using the Underworld3 runtime environment.
+
+Recommended Command
+cd /path/to/REPOSITORIES/underworld3
+pixi run -e runtime python ../Heat_Flux_Diagnostic/main.py
+What This Command Means
+pixi run runs a command inside a pixi-managed environment
+-e runtime selects the Underworld3 environment named runtime
+python ../Heat_Flux_Diagnostic/main.py launches this project using the correct Python, Underworld3, PETSc, and dependency stack
+
+This is the intended execution path for this repository.
+
+## Important Note
+
+Do not assume that python main.py will work from an arbitrary environment.
+
+The safest and recommended approach is always:
+
+pixi run -e runtime python ../Heat_Flux_Diagnostic/main.py
+Optional Underworld3 Checks
+
+From inside the underworld3 directory, these commands may be useful:
+
+./uw doctor
+./uw build
+./uw test
+
+These help verify that the Underworld3 environment is set up correctly before running this project.
+
+Expected Runtime Output
+
+When the model runs successfully, terminal output may include:
+
+planet analogue
+estimated Rayleigh number
+timestep number
+simulation time
+timestep size
+vrms
+inner and outer Nusselt numbers
+
+Example-style output:
+
+Planet analogue: Earth
+Estimated Rayleigh number: ...
+Step 0000 | time = ... | dt = ... | vrms = ...
+Step 0025 | time = ... | dt = ... | vrms = ... | Nu_i = ... | Nu_o = ...
+Heat-Flux Diagnostics
+
+A major scientific addition in this refactor is the implementation of heat-flux diagnostics.
+
+These diagnostics are intended to measure how thermal energy is transported across the model boundaries and how that transport evolves through time.
 
 Heat flux is useful because it provides a more direct measure of transport efficiency than temperature visualization alone. In particular, boundary-averaged radial heat flux can be used to:
 
-- evaluate thermal transport behavior
-- compare model runs under different parameter choices
-- assess whether the system is approaching steady state
-- support future Earth and planetary interior interpretation
+evaluate thermal transport behaviour
+compare model runs under different parameter choices
+assess whether the system is approaching steady state
+support future planetary interior interpretation
+Current Capabilities
 
-## Current Status
+The current workflow includes:
 
-The project structure, code refactor, configuration handling, diagnostics design, and documentation have been developed. Full end-to-end runtime validation is still in progress.
+modular model setup
+structured parameter handling
+annulus-domain thermal convection workflow
+heat-flux diagnostics
+runtime logging of key diagnostic quantities
+plotting and visualization utilities
+lightweight internal validation checks
 
-## Environment Limitation
+The code has been run successfully in the Underworld3 runtime environment during development.
 
-At present, full execution is blocked by a PETSc shared-library linkage issue in the local Underworld3 environment. The compiled Underworld3 extension module depends on libpetsc.3.24.dylib, but that dynamic library is not currently being resolved from the active Python environment during import. This indicates a runtime dependency mismatch between the local Underworld3 build and the available PETSc installation, rather than a logic error in the refactored convection workflow itself.
+Troubleshooting
+Underworld3 does not import
 
-## Next Steps
+From inside the underworld3 repository, try:
 
-The next step is to resolve the PETSc runtime linkage mismatch in the local Underworld3 environment and then perform full end-to-end execution of the refactored workflow. Once import stability is restored, the remaining work will include validation of the Stokes solve, advection-diffusion update, boundary-condition enforcement, and heat-flux diagnostics, followed by generation of reproducible output files and finalized comparison plots. To improve reproducibility and reduce setup ambiguity, the repository will also be extended with documented conda environment instructions for uw3, a dedicated Python/Jupyter kernel configuration using the same uw3 environment, and clearer environment initialization steps for consistent execution across systems.
+./uw doctor
+./uw build
 
-## Summary
+If needed, rerun:
 
-This project is a modular refactor of an Underworld3 thermal convection workflow with a particular emphasis on maintainability, structured parameter handling, and heat-flux diagnostics. Its main purpose is to provide a clean and extensible framework for studying convective heat transport in simplified planetary interior settings, while also laying the groundwork for future Earth and comparative planetary applications.
+./uw setup
+Wrong Python or wrong environment
+
+Always run the project through the Underworld3 runtime environment:
+
+pixi run -e runtime python ../Heat_Flux_Diagnostic/main.py
+API mismatch or solver argument errors
+
+If local Underworld3 source changes or versions are out of sync, rebuild Underworld3:
+
+./uw build
+
+Then rerun the project.
+
+Path problems
+
+If the repositories are not side-by-side, replace the relative path with the full path to main.py.
+
+Example:
+
+pixi run -e runtime python /full/path/to/Heat_Flux_Diagnostic/main.py
+Model Use and Extensions
+
+The refactored workflow is designed as a reusable foundation for future geodynamic and planetary interior studies.
+
+In its current form, it can be used to analyze simplified thermal convection and heat transport in a shell-like domain.
+
+With further development, this framework could be extended toward more realistic mantle-style applications by adding features such as:
+
+temperature-dependent viscosity
+internal heating
+additional transport diagnostics
+more advanced rheologies
+planet-specific parameter sets
+
+Because the workflow is configuration-driven, it is also suitable for comparative studies of other terrestrial bodies through parameter changes alone.
+
+Summary
+
+This project is a modular refactor of an Underworld3 thermal convection workflow with a particular emphasis on:
+
+maintainability
+structured parameter handling
+modular code design
+heat-flux diagnostics
+reproducible execution through the Underworld3 runtime environment
+
+Its main purpose is to provide a clean and extensible framework for studying convective heat transport in simplified planetary interior settings while laying the groundwork for future Earth and comparative planetary applications.
